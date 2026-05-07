@@ -1,9 +1,8 @@
 # app.py
 # This file creates the visual chat interface using Gradio
-# ✅ UPDATED: Now shows Evaluation Scores panel alongside every answer
 
 import gradio as gr
-from chatbotev import ask_chatbot  # imports our updated function from chatbot.py
+from chatbot import ask_chatbot  # imports our updated function from chatbot.py
 
 # -------------------------------------------------------
 # 🆕 UPDATED chat() FUNCTION
@@ -29,7 +28,7 @@ def chat(message, history):
                 "content": entry["content"]
             })
 
-    # ✅ UPDATED: ask_chatbot now returns (answer, eval_scores)
+    # ✅ ask_chatbot now returns (answer, eval_scores)
     answer, eval_scores = ask_chatbot(message, conversation_history)
 
     # --- 🆕 Format the evaluation scores as a readable panel ---

@@ -7,11 +7,20 @@ from langchain_chroma import Chroma
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from groq import Groq
 import os
+from dotenv import load_dotenv
+load_dotenv()
+print("KEY LOADED:", os.getenv("GROQ_API_KEY"))
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+
 
 # -------------------------------------------------------
 # STEP 1: SET YOUR API KEY
 # -------------------------------------------------------
-os.environ["GROQ_API_KEY"] = "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"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # -------------------------------------------------------
 # STEP 2: LOAD THE DATABASE
@@ -29,7 +38,11 @@ print("✅ Database loaded!")
 # -------------------------------------------------------
 # STEP 3: CONNECT TO GROQ (LLaMA 3 Model)
 # -------------------------------------------------------
-client = Groq()
+# -------------------------------------------------------
+# STEP 3: CONNECT TO GROQ (LLaMA 3 Model)
+# -------------------------------------------------------
+client = Groq(api_key=GROQ_API_KEY)
+print("🤖 Connected to Groq API!")
 
 
 # -------------------------------------------------------

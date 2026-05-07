@@ -1,47 +1,127 @@
-# Campus Rules & Policies RAG Chatbot with Evaluation Framework
+# 🏫 Campus Rules RAG Chatbot
 
-A production-style Retrieval-Augmented Generation (RAG) chatbot that answers student queries about campus rules and policies — built with LangChain, ChromaDB, Groq (LLaMA 3.3 70B), and Gradio, with a built-in LLM-as-a-judge evaluation pipeline.
-# How it works
+A **Retrieval-Augmented Generation (RAG)** chatbot that answers student questions about campus rules and policies — powered by **LLaMA 3 (via Groq)**, **ChromaDB**, and **LangChain**, with a built-in **Evaluation Framework**.
 
-# The system is split into three components:
+---
 
-# 1. ingest.py — Document Ingestion Pipeline
+## 🚀 Features
 
-Loads campus rules from a .txt file, splits them into 300-character overlapping chunks using LangChain's 
-RecursiveCharacterTextSplitter, converts each chunk into vector embeddings using the all-MiniLM-L6-v2 sentence transformer, and 
-stores them in a persistent ChromaDB vector database.
+- 🔍 **RAG Pipeline** — Retrieves relevant rules from a vector database before answering
+- 🤖 **LLaMA 3.3 70B** — Uses Groq's fast inference API for responses
+- 📊 **Evaluation Framework** — Every answer is automatically scored for:
+  - **Faithfulness** — Is the answer grounded in the retrieved rules?
+  - **Relevance** — Were the right rules fetched?
+  - **Confidence** — How clearly is the answer stated?
+  - **Hallucination Detection** — Did the model make anything up?
+- 💬 **Gradio UI** — Clean chat interface accessible in the browser
 
-# 2. chatbotev.py — RAG Engine + Evaluation Core
+---
 
-On each query, it performs semantic similarity search over ChromaDB to retrieve the top 3 most relevant rule chunks, then passes them as context to LLaMA 3.3 70B via the Groq API to generate a grounded answer. A second LLM call runs an automated evaluation using the same model as a judge, scoring the response across four metrics:
+## 🗂️ Project Structure
 
-MetricDescriptionFaithfulnessIs the answer grounded in the retrieved context?RelevanceDid the retrieval fetch the right rules?ConfidenceHow clear and direct is the answer?HallucinationDid the answer include anything not in the context?
+```
+campus-rules-chatbot/
+├── documents/
+│   └── campus_rules.txt      # Your campus rules document
+├── ingest.py                 # Loads rules and builds ChromaDB
+├── chatbot.py                # RAG logic + evaluation framework
+├── app.py                    # Gradio chat interface
+├── requirements.txt
+└── README.md
+```
 
-# 3. appev.py — Gradio Chat Interface
+---
 
-Wraps everything in a clean conversational UI. Every response is displayed alongside its evaluation scorecard rendered as a markdown table — giving you real-time observability into RAG quality.
+## ⚙️ Setup & Usage
 
-# Tech Stack
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/campus-rules-chatbot.git
+cd campus-rules-chatbot
+```
 
-LangChain — document loading, chunking, retrieval orchestration
+### 2. Create a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate        # On Windows: venv\Scripts\activate
+```
 
-ChromaDB — local persistent vector store
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-SentenceTransformers (all-MiniLM-L6-v2) — lightweight, free embeddings
+### 4. Add your Groq API key
 
-Groq API + LLaMA 3.3 70B — fast LLM inference for both answering and evaluation
+Open `chatbot.py` and replace the placeholder with your key:
+```python
+os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
+```
+> Get a free API key at [console.groq.com](https://console.groq.com)
 
-Gradio — chat UI
+### 5. Add your campus rules
 
-# Key Features
+Place your rules as plain text in:
+```
+documents/campus_rules.txt
+```
 
+### 6. Build the vector database
+```bash
+python ingest.py
+```
 
-End-to-end RAG pipeline from raw .txt to deployable chatbot
+### 7. Launch the chatbot
+```bash
+python app.py
+```
+Open your browser at **http://localhost:7860**
 
-LLM-as-a-judge evaluation framework (no external eval library needed)
+---
 
-Hallucination detection on every response
+## 🧠 How It Works
 
-Persistent vector DB — ingest once, query forever
+```
+Student Question
+      │
+      ▼
+ChromaDB (similarity search)
+      │
+      ▼
+Top 3 relevant rule chunks
+      │
+      ▼
+LLaMA 3 (Groq) generates answer
+      │
+      ▼
+LLaMA 3 evaluates its own answer
+      │
+      ▼
+Chat UI shows answer + score card
+```
 
-Conversation history support for multi-turn context
+---
+
+## 📦 Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| LangChain | RAG pipeline orchestration |
+| ChromaDB | Vector database |
+| SentenceTransformers (`all-MiniLM-L6-v2`) | Text embeddings |
+| Groq + LLaMA 3.3 70B | LLM for answers & evaluation |
+| Gradio | Chat UI |
+
+---
+
+## ⚠️ Important Notes
+
+- The `campus_db/` folder is excluded from Git (listed in `.gitignore`) — run `ingest.py` locally to rebuild it
+- Never commit your Groq API key — consider using a `.env` file with `python-dotenv` for production
+- `venv/` is also excluded — use `requirements.txt` to recreate it
+
+---
+
+## 🙌 Acknowledgements
+
+Built as a learning project to explore RAG pipelines, vector search, and LLM evaluation.

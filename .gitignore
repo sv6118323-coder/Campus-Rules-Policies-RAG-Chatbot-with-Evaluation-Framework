@@ -1,3 +1,5 @@
-_pycache_/
-venv/
 .env
+__pycache__/
+*.pyc
+campus_db/
+venv/
