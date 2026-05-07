@@ -53,9 +53,7 @@ pip install -r requirements.txt
 
 ### 4. Add your Groq API key
 
-Open `chatbot.py` and replace the placeholder with your key:
-```python
-os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
+create .env file and paste your grop api key there
 ```
 > Get a free API key at [console.groq.com](https://console.groq.com)
 
