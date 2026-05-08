@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 campus_db/
 venv/
+*.env
